@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "homework2-2.h"
+#include "homework2-2.h" 
 
 void fillStudentRecord(StudentStruct *students, int *numOfStudent) {
     addStudent(students, numOfStudent, "Alice", 1001, 90.7, 91.0);
@@ -59,24 +59,63 @@ void fillStudentRecord(StudentStruct *students, int *numOfStudent) {
 /* Return student ID */
 int findBestStudentInMidterm(StudentStruct* students, int numOfStudent) {
     /* TODO */
-    return 1001;
+    int idx = 0;
+
+    for (int i = 1; i < numOfStudent; i++)
+    {
+        if(students[i].record.midterm > students[idx].record.midterm)
+        {
+            idx = i;
+        } 
+    }
+    
+    return students[idx].id;
 }
 
 /* Return student ID */
 int findBestStudentInFinal(StudentStruct* students, int numOfStudent) {
     /* TODO */
-    return 1001;
+    int idx = 0;
+
+    for (int i = 1; i < numOfStudent; i++)
+    {
+        if(students[i].record.final > students[idx].record.final)
+        {
+            idx = i;
+        }
+    }
+    
+    return students[idx].id;
 }
 
 /* Return student ID */
 int findBestStudent(StudentStruct* students, int numOfStudent) {
     /* TODO */
-    return 1001;
+    int idx = 0;
+
+    for (int i = 1; i < numOfStudent; i++)
+    {
+        if(students[i].record.midterm + students[i].record.final
+             > students[idx].record.midterm + students[idx].record.final)
+        {
+            idx = i;
+        }      
+    }
+    
+    return students[idx].id;
 }
 
 /* Return Index */
 int findStudentByStudentID(StudentStruct* students, int numOfStudent, int id) {
     /* TODO */
+    for (int i = 0; i < numOfStudent; i++)
+    {
+        if(id == students[i].id)
+        {
+            return i;
+        }
+    }
+    
     return -1;
 }
 
@@ -84,6 +123,10 @@ void modifyRecord(StudentStruct *students, int numOfStudent, const StudentStruct
     int idx = findStudentByStudentID(students, numOfStudent, student.id);
     if (idx >= 0) {
         /* TODO */
+        students[idx].name = student.name;
+        students[idx].id = student.id;
+        students[idx].record.midterm = student.record.midterm;
+        students[idx].record.final = student.record.final;
     }
 }
 
@@ -92,30 +135,66 @@ void addStudent(StudentStruct *students, int *numOfStudent, const char* name, in
     if (idx < 0) {
         ++(*numOfStudent);
         /* TODO */
+        students[*numOfStudent - 1].name = name;
+        students[*numOfStudent - 1].id = id;
+        students[*numOfStudent - 1].record.midterm = midterm;
+        students[*numOfStudent - 1].record.final = final;
     }
 }
 
 void deleteStudent(StudentStruct* students, int *numOfStudent, int id) {
     int idx = findStudentByStudentID(students, *numOfStudent, id);
     if (idx >= 0) {
+        for (int i = idx; i < *numOfStudent - 1; i++)
+        {
+            students[i] = students[i + 1];
+        }
+        
         --(*numOfStudent);
-        /* TODO */
     }
 }
 
 float getMidtermAverage(StudentStruct* students, int numOfStudent) {
     /* TODO */
-    return 0.0f;
+    float sum = 0;
+
+    for (int i = 0; i < numOfStudent; i++)
+    {
+        sum += students[i].record.midterm;
+    }
+
+    float midtermAverage = sum / numOfStudent;
+    
+    return midtermAverage;
 }
 
 float getFinalAverage(StudentStruct* students, int numOfStudent) {
     /* TODO */
-    return 0.0f;
+    float sum = 0;
+
+    for (int i = 0; i < numOfStudent; i++)
+    {
+        sum += students[i].record.final;
+    }
+
+    float finalAverage = sum / numOfStudent;
+    
+    return finalAverage;
 }
 
 float getTotalAverage(StudentStruct* students, int numOfStudent) {
     /* TODO */
-    return 0.0f;
+    float sum = 0;
+
+    for (int i = 0; i < numOfStudent; i++)
+    {
+        float average = (students[i].record.midterm + students[i].record.final) / 2;
+        sum += average;
+    }
+
+    float totalAverage = sum / numOfStudent;
+    
+    return totalAverage;
 }
 
 void printStudentInfo(StudentStruct* students, int numOfStudent, int id) {
@@ -125,5 +204,3 @@ void printStudentInfo(StudentStruct* students, int numOfStudent, int id) {
                   << ", ID: " << students[idx].id << std::endl;
     }
 }
-
-
